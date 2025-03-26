@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'users';
 
@@ -29,10 +30,5 @@ class User extends Authenticatable
     protected function locations(): HasMany
     {
         return $this->hasMany(Location::class);
-    }
-
-    protected function sessions(): HasMany
-    {
-        return $this->hasMany(Session::class);
     }
 }

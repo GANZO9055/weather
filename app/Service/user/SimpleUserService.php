@@ -19,4 +19,9 @@ class SimpleUserService implements UserService
     {
         return $this->userRepository->create($userDTO);
     }
+
+    function findByEmailAndPassword(string $email, string $password): User
+    {
+        return $this->userRepository->findByEmailAndPassword($email, $password);
+    }
 }

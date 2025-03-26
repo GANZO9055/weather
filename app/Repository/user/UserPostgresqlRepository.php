@@ -18,4 +18,12 @@ class UserPostgresqlRepository implements UserRepository
             ])->save();
         return $user;
     }
+
+    function findByEmailAndPassword(string $email, string $password): User
+    {
+        return User::query()
+            ->where('email', $email)
+            ->where('password', $password)
+            ->firstOrFail();
+    }
 }
