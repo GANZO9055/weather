@@ -55,8 +55,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | When utilizing the "file" session driver, the session files are placed
-    | on disk. The default storage location is defined here; however, you
-    | are free to provide another location where they should be stored.
+    | on disk. The default storage locations is defined here; however, you
+    | are free to provide another locations where they should be stored.
     |
     */
 
@@ -108,7 +108,7 @@ return [
     | Session Sweeping Lottery
     |--------------------------------------------------------------------------
     |
-    | Some session drivers must manually sweep their storage location to get
+    | Some session drivers must manually sweep their storage locations to get
     | rid of old sessions from storage. Here are the chances that it will
     | happen on a given request. By default, the odds are 2 out of 100.
     |
