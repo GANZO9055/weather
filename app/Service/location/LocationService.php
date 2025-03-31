@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repository\location;
+namespace App\Service\location;
 
 use App\Dto\LocationDTO;
 use Illuminate\Database\Eloquent\Collection;
 
-interface LocationRepository
+interface LocationService
 {
     function findAll(): Collection;
     function create(LocationDTO $locationDto): bool;

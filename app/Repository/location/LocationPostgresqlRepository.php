@@ -14,16 +14,6 @@ class LocationPostgresqlRepository implements LocationRepository
         return Location::all();
     }
 
-    function findById(int $id): LocationDTO
-    {
-        return Location::query()->find($id);
-    }
-
-    function findByUserId(int $userId): Collection
-    {
-        return Location::query()->where('user_id', $userId)->get();
-    }
-
     function create(LocationDTO $locationDto): bool
     {
         return Location::query()->firstOrCreate([
