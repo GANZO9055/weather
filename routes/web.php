@@ -16,10 +16,10 @@ Route::post('/logout', [UserController::class, 'logout'])
     ->name('logout');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/locations', [LocationController::class, 'showLocation'])
-        ->name('locations.show');
+    Route::get('/locations', [LocationController::class, 'index'])
+        ->name('locations.index');
     Route::get('/locations/create', [LocationController::class, 'createLocation'])
-        ->name('locations.show.create');
+        ->name('locations.index.create');
     Route::post('/create', [LocationController::class, 'create'])
         ->name('locations.create');
     Route::delete('/locations/{id}', [LocationController::class, 'delete'])

@@ -20,36 +20,31 @@ class WeatherApiService
         $this->apiKey = $_ENV['GISMETEO_API_KEY'];
     }
 
-
-    /**
-     * @throws ConnectionException
-     */
-    function getWeatherByCoordinates(float $latitude, float $longitude): object
+    public function getTemperatureByCoordinates(float $latitude, float $longitude): float
     {
         $newUrl = $this->url . 'latitude=' . $latitude . '&longitude=' . $longitude;
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'X-Gismeteo-Token'=>$_ENV['GISMETEO_API_KEY'],
-        ])->get(
-            $newUrl
-        );
-        return $response->object();
+        return $this->getTemperature($newUrl);
     }
 
-    /**
-     * @throws ConnectionException
-     */
-    function grtWeatherByName(string $name): object
+    public function getTemperatureByName(string $name): float
     {
         $newUrl = $this->url . 'query=' . $name;
+        return $this->getTemperature($newUrl);
+    }
 
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'X-Gismeteo-Token'=>$_ENV['GISMETEO_API_KEY'],
-        ])->get(
-            $newUrl
-        );
-        return $response->object();
+    private function getTemperature(string $newUrl): float
+    {
+        try {
+            $response = Http::withHeaders([
+                'Accept' => 'application/json',
+                'X-Gismeteo-Token' => $this->apiKey,
+            ])->get(
+                $newUrl
+            );
+            return $response->json()['temperature']['air']['C'];
+        } catch (ConnectionException $e) {
+            echo $e->getMessage();
+        }
+        return 0;
     }
 }

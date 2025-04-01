@@ -3,12 +3,13 @@
 namespace App\Service\location;
 
 use App\Dto\LocationDTO;
-use Illuminate\Database\Eloquent\Model;
+use App\Dto\WeatherDTO;
+use Illuminate\Database\Eloquent\Collection;
 
 interface LocationService
 {
-    function findById(int $id): Model;
-    function findAll();
-    function create(LocationDTO $locationDto): bool;
-    function delete(int $id): bool;
+    function getLocationById(int $id): WeatherDTO;
+    function getAllLocation(): array;
+    function addLocation(LocationDTO $locationDto): bool;
+    function deleteLocation(int $id): bool;
 }

@@ -3,10 +3,10 @@
 namespace App\Service\location;
 
 use App\Dto\LocationDTO;
+use App\Dto\WeatherDTO;
 use App\Models\Location;
 use App\Repository\location\LocationRepository;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 
 class SimpleLocationService implements LocationService
 {
@@ -24,22 +24,41 @@ class SimpleLocationService implements LocationService
     }
 
 
-    function findById(int $id): Model
+    function getLocationById(int $id): WeatherDTO
     {
-        return $this->repository->findById($id);
+        $location = $this->repository->findById($id);
+        $temperature = $this->weatherApiService->getTemperatureByCoordinates(
+            $location->getAttribute('latitude'),
+            $location->getAttribute('longitude')
+        );
+        return new WeatherDTO(
+            $location->getAttribute('id'),
+            $location->getAttribute('name'),
+            $temperature
+        );
     }
 
-    public function findAll(): Collection
+    public function getAllLocation(): array
     {
-        return Location::all();
+        $array = [];
+        $this->repository->findAll()->map(function (Location $location) use (&$array) {
+            $array[] = new WeatherDTO(
+                $location->getAttribute('id'),
+                $location->getAttribute('name'),
+                $this->weatherApiService->getTemperatureByCoordinates(
+                    $location->getAttribute('latitude'),
+                    $location->getAttribute('longitude')
+                ));
+        });
+        return $array;
     }
 
-    function create(LocationDTO $locationDto): bool
+    function addLocation(LocationDTO $locationDto): bool
     {
         return $this->repository->create($locationDto);
     }
 
-    function delete(int $id): bool
+    function deleteLocation(int $id): bool
     {
         return $this->repository->delete($id);
     }
