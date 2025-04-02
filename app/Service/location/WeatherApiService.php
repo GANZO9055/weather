@@ -9,6 +9,8 @@ class WeatherApiService
 {
     private string $url;
     private string $apiKey;
+    private string $units;
+    private string $verify;
 
     /**
      * @param string $url
@@ -16,32 +18,40 @@ class WeatherApiService
      */
     public function __construct()
     {
-        $this->url = 'https://api.gismeteo.net/v2/weather/current/?';
-        $this->apiKey = $_ENV['GISMETEO_API_KEY'];
+        $this->url = 'https://api.openweathermap.org/data/2.5/weather?';
+        $this->apiKey = env('OPEN_WEATHER_MAP_API_KEY');
+        $this->units = 'metric';
+        $this->verify = env('VERIFY');
     }
 
     public function getTemperatureByCoordinates(float $latitude, float $longitude): float
     {
-        $newUrl = $this->url . 'latitude=' . $latitude . '&longitude=' . $longitude;
+        $newUrl = $this->url . http_build_query([
+                'lat' => $latitude,
+                'lon' => $longitude,
+                'appid' => $this->apiKey,
+                'units' => $this->units
+            ]);
         return $this->getTemperature($newUrl);
     }
 
     public function getTemperatureByName(string $name): float
     {
-        $newUrl = $this->url . 'query=' . $name;
+        $newUrl = $this->url . http_build_query([
+                'q' => $name,
+                'appid' => $this->apiKey,
+                'units' => $this->units
+            ]);
         return $this->getTemperature($newUrl);
     }
 
     private function getTemperature(string $newUrl): float
     {
         try {
-            $response = Http::withHeaders([
-                'Accept' => 'application/json',
-                'X-Gismeteo-Token' => $this->apiKey,
-            ])->get(
-                $newUrl
-            );
-            return $response->json()['temperature']['air']['C'];
+            $response = Http::withOptions([
+                'verify' => $this->verify
+            ])->get($newUrl);
+            return $response->json()['main']['temp'];
         } catch (ConnectionException $e) {
             echo $e->getMessage();
         }
