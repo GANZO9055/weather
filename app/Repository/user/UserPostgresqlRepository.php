@@ -4,6 +4,7 @@ namespace App\Repository\user;
 
 use App\Dto\UserDTO;
 use App\Models\User;
+use http\Exception\RuntimeException;
 use Illuminate\Support\Facades\Hash;
 
 class UserPostgresqlRepository implements UserRepository
@@ -21,9 +22,12 @@ class UserPostgresqlRepository implements UserRepository
 
     function findByEmailAndPassword(string $email, string $password): User
     {
-        return User::query()
-            ->where('email', $email)
-            ->where('password', $password)
-            ->firstOrFail();
+        $user = User::query()->where('email', $email)->firstOrFail();
+
+        if (!Hash::check($password, $user->password)) {
+            throw new RuntimeException('Wrong password');
+        }
+
+        return $user;
     }
 }
