@@ -30,6 +30,12 @@ class UserController extends Controller
 
     public function create(Request $request): RedirectResponse
     {
+        $request->validate([
+            'username' => 'required|string',
+            'email' => 'required|string|email',
+            'password' => 'required|string'
+        ]);
+
         $userDto = new UserDTO(
             $request->get('username'),
             $request->get('email'),
