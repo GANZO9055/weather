@@ -7,6 +7,7 @@ use App\Dto\WeatherDTO;
 use App\Models\Location;
 use App\Repository\location\LocationRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class SimpleLocationService implements LocationService
 {
@@ -53,7 +54,7 @@ class SimpleLocationService implements LocationService
         return $array;
     }
 
-    function addLocation(LocationDTO $locationDto): bool
+    function addLocation(LocationDTO $locationDto): Model
     {
         return $this->repository->create($locationDto);
     }

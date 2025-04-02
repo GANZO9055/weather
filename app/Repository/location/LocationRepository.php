@@ -9,6 +9,6 @@ interface LocationRepository
 {
     function findById(int $id): Model;
     function findAll();
-    function create(LocationDTO $locationDto): bool;
+    function create(LocationDTO $locationDto): Model;
     function delete(int $id): bool;
 }

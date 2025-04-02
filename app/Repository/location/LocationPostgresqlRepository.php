@@ -20,10 +20,11 @@ class LocationPostgresqlRepository implements LocationRepository
         return Location::all();
     }
 
-    public function create(LocationDTO $locationDto): bool
+    public function create(LocationDTO $locationDto): Model
     {
         return Location::query()->firstOrCreate([
             'name' => $locationDto->getName(),
+            'user_id' => $locationDto->getUserId(),
             'latitude' => $locationDto->getLatitude(),
             'longitude' => $locationDto->getLongitude(),
         ]);
@@ -31,6 +32,10 @@ class LocationPostgresqlRepository implements LocationRepository
 
     function delete(int $id): bool
     {
-        return Location::query()->find($id)->delete();
+        $location = Location::query()->find($id);
+        if ($location != null) {
+            return $location->delete();
+        }
+        return false;
     }
 }

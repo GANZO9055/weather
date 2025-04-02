@@ -35,12 +35,14 @@ class LocationController
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'user_id' => 'required|integer|exists:users,id',
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
         ]);
 
         $location = new LocationDTO(
             $request->get('name'),
+            $request->get('user_id'),
             $request->get('latitude'),
             $request->get('longitude')
         );
