@@ -4,7 +4,7 @@ namespace App\Repository\user;
 
 use App\Dto\UserDTO;
 use App\Models\User;
-use http\Exception\RuntimeException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Hash;
 
 class UserPostgresqlRepository implements UserRepository
@@ -25,7 +25,7 @@ class UserPostgresqlRepository implements UserRepository
         $user = User::query()->where('email', $email)->firstOrFail();
 
         if (!Hash::check($password, $user->password)) {
-            throw new RuntimeException('Wrong password');
+            throw new ModelNotFoundException('Invalid credentials');
         }
 
         return $user;
